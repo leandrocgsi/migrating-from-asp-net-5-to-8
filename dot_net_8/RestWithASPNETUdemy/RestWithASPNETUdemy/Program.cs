@@ -26,14 +26,70 @@ app.Run();
 using EvolveDb;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using MySqlConnector;
+using RestWithASPNETUdemy.Business.Implementations;
+using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Model.Context;
+using RestWithASPNETUdemy.Repository.Generic;
+using RestWithASPNETUdemy.Repository;
+using RestWithASPNETUdemy.Services.Implementations;
+using RestWithASPNETUdemy.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using RestWithASPNETUdemy.Configurations;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var appName = "REST API's from 0 to Azure with ASP.NET Core 8 and Docker";
 var appDescription = $"REST API RESTful developed in course '{appName}'";
+
+var tokenConfigurations = new TokenConfiguration();
+
+new ConfigureFromConfigurationOptions<TokenConfiguration>(
+        builder.Configuration.GetSection("TokenConfigurations")
+    )
+    .Configure(tokenConfigurations);
+
+builder.Services.AddSingleton(tokenConfigurations);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = tokenConfigurations.Issuer,
+        ValidAudience = tokenConfigurations.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
+    };
+});
+
+builder.Services.AddAuthorization(auth =>
+{
+    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser().Build());
+});
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+}));
 
 builder.Services.AddControllers();
 
@@ -64,6 +120,16 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
+builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+builder.Services.AddScoped<ILoginBusiness, LoginBusinessImplementation>();
+builder.Services.AddScoped<IFileBusiness, FileBusinessImplementation>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
 builder.Services.AddApiVersioning();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
@@ -72,8 +138,6 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
         .AllowAnyMethod()
         .AllowAnyHeader();
 }));
-
-// Add your services, middleware, and configurations here...
 
 var app = builder.Build();
 
