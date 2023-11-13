@@ -73,10 +73,6 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
         .AllowAnyHeader();
 }));
 
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
-    connection,
-    new MySqlServerVersion(new Version(8, 0, 29))));
-
 // Add your services, middleware, and configurations here...
 
 var app = builder.Build();
