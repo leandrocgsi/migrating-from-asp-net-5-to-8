@@ -7,7 +7,6 @@ namespace RestWithASPNETUdemy.Hypermedia.Enricher
 {
     public class PersonEnricher : ContentResponseEnricher<PersonVO>
     {
-        private readonly object _lock = new object();
         protected override Task EnrichModel(PersonVO content, IUrlHelper urlHelper)
         {
             var path = "api/person";
@@ -55,7 +54,7 @@ namespace RestWithASPNETUdemy.Hypermedia.Enricher
         {
             lock (this)
             {
-                var url = new { controller = path, id = id };
+                var url = new { controller = path, id };
                 return new StringBuilder(urlHelper.Link("DefaultApi", url)).Replace("%2F", "/").ToString();
             };
         }
