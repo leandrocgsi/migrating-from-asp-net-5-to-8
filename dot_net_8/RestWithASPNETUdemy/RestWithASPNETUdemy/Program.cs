@@ -173,7 +173,7 @@ app.UseRewriter(option);
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
+app.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
 
 app.Run();
 
