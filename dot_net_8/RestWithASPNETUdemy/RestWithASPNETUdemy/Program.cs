@@ -64,6 +64,8 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+builder.Services.AddApiVersioning();
+
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 {
     builder.AllowAnyOrigin()
@@ -74,22 +76,6 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
     connection,
     new MySqlServerVersion(new Version(8, 0, 29))));
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1",
-        new Microsoft.OpenApi.Models.OpenApiInfo
-        {
-            Title = appName,
-            Version = "v1",
-            Description = appDescription,
-            Contact = new Microsoft.OpenApi.Models.OpenApiContact
-            {
-                Name = "Leandro Costa",
-                Url = new Uri("https://github.com/leandrocgsi")
-            }
-        });
-});
 
 // Add your services, middleware, and configurations here...
 
