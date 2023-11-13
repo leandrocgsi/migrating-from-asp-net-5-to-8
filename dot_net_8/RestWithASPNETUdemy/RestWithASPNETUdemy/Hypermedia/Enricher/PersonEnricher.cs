@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Hypermedia.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RestWithASPNETUdemy.Hypermedia.Enricher
 {
@@ -57,7 +53,7 @@ namespace RestWithASPNETUdemy.Hypermedia.Enricher
 
         private string GetLink(long id, IUrlHelper urlHelper, string path)
         {
-            lock (_lock)
+            lock (this)
             {
                 var url = new { controller = path, id = id };
                 return new StringBuilder(urlHelper.Link("DefaultApi", url)).Replace("%2F", "/").ToString();

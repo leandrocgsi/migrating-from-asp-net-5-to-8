@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Hypermedia.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RestWithASPNETUdemy.Hypermedia.Enricher
 {
