@@ -60,8 +60,8 @@ namespace RestWithASPNETUdemy.Repository
 
         private string ComputeHash(string input, SHA256CryptoServiceProvider algorithm)
         {
-            Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-            Byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
             return BitConverter.ToString(hashedBytes);
         }
 
