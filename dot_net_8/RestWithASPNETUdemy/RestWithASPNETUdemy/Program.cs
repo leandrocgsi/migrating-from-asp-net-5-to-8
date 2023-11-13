@@ -27,6 +27,7 @@ using EvolveDb;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using MySqlConnector;
 using RestWithASPNETUdemy.Model.Context;
 using Serilog;
 
@@ -35,7 +36,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
+builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
+    connection,
+    new MySqlServerVersion(new Version(8, 0, 29)))
+);
 
 if (builder.Environment.IsDevelopment())
 {
@@ -65,7 +69,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
         .AllowAnyHeader();
 }));
 
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
+builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
+    connection,
+    new MySqlServerVersion(new Version(8, 0, 29))));
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -107,8 +113,8 @@ void MigrateDatabase(string connection)
 {
     try
     {
-        var evolveConnection = new MySql.Data.MySqlClient.MySqlConnection(connection);
-        var evolve = new Evolve.Evolve(evolveConnection, msg => Log.Information(msg))
+        var evolveConnection = new MySqlConnection(connection);
+        var evolve = new Evolve(evolveConnection, Log.Information)
         {
             Locations = new List<string> { "db/migrations", "db/dataset" },
             IsEraseDisabled = true,
