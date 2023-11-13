@@ -32,6 +32,8 @@ using RestWithASPNETUdemy.Model.Context;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+var appName = "REST API's from 0 to Azure with ASP.NET Core 8 and Docker";
+var appDescription = $"REST API RESTful developed in course '{appName}'";
 
 builder.Services.AddControllers();
 
@@ -51,9 +53,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",
         new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = "REST API's From 0 to Azure with ASP.NET Core 5 and Docker",
+            Title = appName,
             Version = "v1",
-            Description = "API RESTful developed in course 'REST API's From 0 to Azure with ASP.NET Core 5 and Docker'",
+            Description = appDescription,
             Contact = new Microsoft.OpenApi.Models.OpenApiContact
             {
                 Name = "Leandro Costa",
@@ -78,9 +80,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",
         new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = "REST API's From 0 to Azure with ASP.NET Core 5 and Docker",
+            Title = appName,
             Version = "v1",
-            Description = "API RESTful developed in course 'REST API's From 0 to Azure with ASP.NET Core 5 and Docker'",
+            Description = appDescription,
             Contact = new Microsoft.OpenApi.Models.OpenApiContact
             {
                 Name = "Leandro Costa",
@@ -97,7 +99,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", appName));
 }
 
 app.UseHttpsRedirection();
