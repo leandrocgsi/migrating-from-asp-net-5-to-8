@@ -24,10 +24,8 @@ app.MapControllers();
 app.Run();
 */
 using EvolveDb;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using MySqlConnector;
 using RestWithASPNETUdemy.Business.Implementations;
 using RestWithASPNETUdemy.Business;
@@ -39,7 +37,6 @@ using RestWithASPNETUdemy.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RestWithASPNETUdemy.Configurations;
