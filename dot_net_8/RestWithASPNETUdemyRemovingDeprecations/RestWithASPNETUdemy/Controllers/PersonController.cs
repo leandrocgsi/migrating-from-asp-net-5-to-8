@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Hypermedia.Filters;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace RestWithASPNETUdemy.Controllers
 {
